@@ -11,8 +11,10 @@ import com.appiancorp.suiteapi.type.TypedValue;
 import com.appiancorp.suiteapi.type.exceptions.InvalidTypeException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
 import java.util.Map;
 
 @Category("category.name.LogicalFunctions")
@@ -20,7 +22,7 @@ public class Test{
 	private static final Logger LOG = Logger.getLogger(Test.class);
 	
 	@Function
-	public static TypedValue michelle(@Parameter @Name("field") String paramString, @Parameter @Name("dictionary") TypedValue dictionary, @Parameter @Name("value") String valueParam) {
+	public static TypedValue michelle(TypeService ts, @Parameter @Name("field") String paramString, @Parameter @Name("dictionary") TypedValue dictionary, @Parameter @Name("value") String valueParam) {
 		TypedValue t = new TypedValue();
 		String[] emptyString = new String[0];
 	    Long type = dictionary.getInstanceType();
@@ -30,16 +32,31 @@ public class Test{
 	    if ((type.longValue() == 57L) || (value == null) || ("".equals(value))) {
 	      return null;
 	    }
-		if (type.longValue() == 94L) {
-			ArrayList<HashMap<TypedValue, TypedValue>> a = (ArrayList<HashMap<TypedValue,TypedValue>>)value;
-			
+		if (type.longValue() == 194L) {
+//			HashMap testmap = (HashMap)value;
+//			return testmap.toString();
+			ArrayList<HashMap<TypedValue, TypedValue>> a = new ArrayList(Arrays.asList((HashMap[])ts.cast(Long.valueOf(194L), dictionary).getValue()));
+//			ArrayList<HashMap<TypedValue, TypedValue>> a = (ArrayList<HashMap<TypedValue,TypedValue>>)value;
+
 			for(int i = 0; i < a.size(); i++) {
 				 HashMap map = (HashMap)a.get(i);
-				 if(map.containsKey(paramString)) {
-					 if(map.get(paramString).equals(valueParam)) {
+				 HashMap<String,TypedValue> keyMap = new HashMap<String,TypedValue>();
+				 ArrayList<String> keyStrings = new ArrayList<String>();
+				 for(Object key : map.keySet()) {
+					 TypedValue key_value = (TypedValue)key;
+					 keyStrings.add(key_value.getValue().toString());
+					 keyMap.put(key_value.getValue().toString(), key_value);
+				 }
+					 
+				 if(keyStrings.contains(paramString)) {
+					 TypedValue keyvalue = keyMap.get(paramString);
+					 TypedValue mapValue = (TypedValue)map.get(keyvalue);
+					 
+					 if(mapValue.getValue().toString().equals(valueParam)) {
 						 indices.add(i);
 					 }
 				 }
+
 				 else {
 					 return null;
 				 }
