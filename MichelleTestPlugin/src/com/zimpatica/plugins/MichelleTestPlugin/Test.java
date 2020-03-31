@@ -14,7 +14,7 @@ public class Test{
 	private static final Logger LOG = Logger.getLogger(Test.class);
 	
 	@Function
-	public Boolean michelle() throws AppianException {
+	public Boolean michelle(@Parameter @Name("name") String paramString) throws AppianException {
 		return true;
 	}
 }
