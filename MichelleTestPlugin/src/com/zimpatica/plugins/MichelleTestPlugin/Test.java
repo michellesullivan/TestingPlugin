@@ -11,7 +11,7 @@ public class Test{
 	private static final Logger LOG = Logger.getLogger(Test.class);
 	
 	@Function
-	public Boolean michelle(@Parameter @Name("name") String paramString) {
+	public static Boolean michelle(@Parameter @Name("name") String paramString) {
 		return paramString.equals("michelle");
 	}
 }
